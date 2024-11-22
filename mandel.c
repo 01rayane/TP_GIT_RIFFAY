@@ -24,15 +24,57 @@ double cy( int y ) // Normalise un vecteur (y)
     return -1.0 + y * qy;
 }
  
-int main(int argc, char *argv[])
+
+struct col
 {
-    struct ppm_image im;
-    ppm_image_init( &im , SIZEX , SIZEY ); // Initialise l'mage pour afficher l'ensemble
+    int r;
+    int g;
+    int b;
+};
  
-    int i,j;
-    double colref = 255.0/log(ITER); // Initialise la varibale colref qui permettra de gérér l'intensité de la couleur
+struct col getcol( int val , int max )
+{
+    double q = (double)val/(double)max;
  
-    for (i = 0; i < SIZEX; ++i) { // Debut de la boucle de calcul
+    struct col c = { 0, 0, 0 };
+ 
+    if( q < 0.25 )
+    {
+            c.r = ( q * 4.0 ) * 255.0;
+            c.b = 255;
+        }
+    else if( q < 0.5 )
+    {
+            c.b = 255;
+            c.g = 255;
+            c.r = (q-0.25)*4.0*255.0;
+ 
+        }
+    else if( q < 0.75 )
+    {
+            c.b = 255;
+            c.r = 255;
+            c.g = 255.0 - (q-0.5)*4.0*255.0;
+        }
+    else
+    {
+            c.b = 255-(q-0.75)*4.0*255.0;
+            c.g = 0;
+            c.r = 255;
+        }
+ 
+    return c;
+}
+
+
+int main(int argc, char *argv[]) {
+  struct ppm_image im;
+  ppm_image_init(&im, SIZEX, SIZEY); // Initialise l'mage pour afficher l'ensemble
+
+  int i, j;
+  int colref = log(ITER); // Initialise la varibale colref qui permettra de gérér l'intensité de la couleur
+
+	for (i = 0; i < SIZEX; ++i) {// Debut de la boucle de calcul
         for (j = 0; j < SIZEY; ++j) {
  
             unsigned long int iter = 0;
@@ -43,8 +85,8 @@ int main(int argc, char *argv[])
             while(iter < ITER)
             {
                 double mod = cabs(z);
- 
                 if( TRSH < mod )
+
                 {
                     break;
                 }
@@ -54,14 +96,14 @@ int main(int argc, char *argv[])
                 iter++;
             }
  
-            int grey = colref*log(iter); 
-            ppm_image_setpixel(&im, i,j, grey, grey , grey );
+            struct col cc = getcol( log(iter), colref );
+            ppm_image_setpixel(&im, i,j, cc.r, cc.g , cc.b );
         }
     }
- 
-    ppm_image_dump( &im, "m.ppm");
-    ppm_image_release( &im );
- 
- 
-    return 0;
+
+  ppm_image_dump(&im, "m.ppm");
+  ppm_image_release(&im);
+
+  return 0;
 }
+

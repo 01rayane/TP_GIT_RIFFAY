@@ -19,3 +19,4 @@ mandel: mandel.c $(LIB)
 
 clean:
 	rm -f $(TARGET) $(LIB)
+

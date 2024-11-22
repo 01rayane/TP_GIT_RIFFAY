@@ -51,3 +51,4 @@ int ppm_image_dump(struct ppm_image *im, char *path) {
 
   return 0;
 }
+
