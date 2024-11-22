@@ -2,10 +2,11 @@
 #include <complex.h>
 #include <math.h>
 #include "ppm.h"
+#include <omp.h>
  
  
 #define TRSH 2.0
-#define ITER 1024
+#define ITER 1024 //Correction, ce n'est pas 1024ull mais bien 1024
  
 #define SIZEX 1500
 #define SIZEY 1500
@@ -74,18 +75,19 @@ int main(int argc, char *argv[]) {
   int i, j;
   int colref = log(ITER); // Initialise la varibale colref qui permettra de gérér l'intensité de la couleur
 
+	#pragma omp parallel for //Parallélise automatiquement les boucles for
 	for (i = 0; i < SIZEX; ++i) {// Debut de la boucle de calcul
         for (j = 0; j < SIZEY; ++j) {
  
             unsigned long int iter = 0;
  
-            double complex c =  cx(i) + cy(j) * I; // Initialisation des nombres complexes. cx permet de normaliser i (qui varie de 0 a 1500)
+            double complex c =  cx(i) + cy(j) * I; // Initialisation des nombres complexes. cx permet de normaliser i afin qu'il reste dans l'ensemble (qui varie de 0 a 1500)
             double complex z = 0; //Idem pour cy. z commence a 0
  
-            while(iter < ITER)
+            while(iter < ITER) // Lorsque l'on depassera le nombre d'itérations, on calcule la couleur du pixel.
             {
                 double mod = cabs(z);
-                if( TRSH < mod )
+                if( TRSH < mod ) //Correction : ce n'est pas TRSH -lt ... (on n'est pas en bash)
 
                 {
                     break;
@@ -101,7 +103,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-  ppm_image_dump(&im, "m.ppm");
+  ppm_image_dump(&im, "m.ppm"); //Correction, ce n'est pas "&amp ; im" mais simplement &im, le ponteur vers l'image
   ppm_image_release(&im);
 
   return 0;

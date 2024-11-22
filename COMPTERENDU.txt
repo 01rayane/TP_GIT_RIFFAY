@@ -1,0 +1,43 @@
+BEN MOHAMED Marawan // RIFFAY Mohamed Rayane // IATIC3
+
+######### EXO 1###########
+
+Voir commentaires sur le fichier ppm.h directement
+Pour cloner le repo il suffit de faire un git clone "url du repo"
+
+######### EXO 2###########
+
+Les corrections ont été effectués et notifiés sur le fichier directement.
+C'était surtout des corrections de syntaxe le code étant deja bon pour le reste
+
+Le code est commenté pour expliqué comment il fonctionne
+
+Pour faire un commit, on a commencé par faire un git add . pour ajouter les fichiers modifiés, ensuite
+git commit -m "Le message".
+
+######### EXO 3 ##########
+
+On a commencé par fork (directement depuis le site github) le répo le plus a jour a le précédent n'avait pas la branche color_support.
+Il a fallu mettre a jour les fichiers pour prendre en compte les modifs.
+
+Pour en revenir a l'exo, afin de ramener la branche color_support au dessus de la branche master il faut merge les deux branches
+(les fusionner). On commence par git checkout master au cas ou l'on ne serait pas sur cette branche, puis git merge color_support.
+Forcément, il y a des conflits que nous affiche cette commande. On le corrige en ouvrant les fichiers ou il y a des conflits. 
+On les regles manuellement en consevant ou fusionnant les bouts de codes qui nous interessent (ils sont directement affiches sur les fichiers)
+Ensuite on a git add . pour sauvegarder les modifs (apres avoir teste le code !) et on peut enfin faire un commit des modifs.
+On peut aussi envoyer les fichiers sur un depot distant avec un git push origin master
+
+######### EXO 4 ##########
+
+On va créer un repo git pouis le lier a n otre depot local.
+On commence par le creer manuellement sur le site.
+git remote -v pour verifier vers quels depots distants notre depot local est lié.
+git remote add monrep git@github.com:01rayane/TP_GIT_RIFFAY.git pour lier au depot distant. On peut le reverifier avec un git remote -v
+git push --all monrep pour envoyer toutes les branches sur le depot distant.
+
+######### EXO 5 ##########
+
+On a simplement décidé de paralléliser le programme qui est un oeut lent a la compilation.
+On avit envie d'utliser des threads (pthreads, semaphores....) mais on a pas tout a fait reussi a l'implementer.
+On a donc trouvé une bibliothèque qui nous permetrrait d'optimiser un petit peu le code : omp.h
+Avec une commande on peut automatiquement paralléliser a la compilation des boucles for notammment.
